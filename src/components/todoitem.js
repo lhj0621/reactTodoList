@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { RiDeleteBin5Fill, RiCheckDoubleLine } from 'react-icons/ri';
+import { useTodoDispatch } from '../TodoContext';
 
 const Text = styled.div`
   flex: 1;
@@ -59,15 +60,21 @@ const CheckCircle = styled.div`
 `;
 
 function TodoItem({ id, text, done }) {
+  const dispatch = useTodoDispatch();
+  const onToggle = () => dispatch({ type: 'CHECK', id });
+  const onRemove = () => dispatch({ type: 'REMOVE', id });
+
     return (
         <TodoItemBox>
-            <CheckCircle done={done}>{done && <RiCheckDoubleLine />}</CheckCircle>
-            <Text done={done}>123 가나다라</Text>
-            <Remove>
+            <CheckCircle done={done} onClick={onToggle}>
+              {done && <RiCheckDoubleLine />}
+            </CheckCircle>
+            <Text done={done}>{text}</Text>
+            <Remove onClick={onRemove}>
                 <RiDeleteBin5Fill />
             </Remove>
         </TodoItemBox>
     );
 }
 
-export default TodoItem;
+export default React.memo(TodoItem);
